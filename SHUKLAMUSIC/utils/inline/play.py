@@ -36,7 +36,7 @@ def track_markup(_, videoid, user_id, channel, fplay):
         [
             InlineKeyboardButton(
                 text=f"⛦ ᴊᴏɪɴ ⛦",
-              url="https://t.me/THE_DRAMA_CLUB_01",
+              url="https://t.me/mastiwithfriendsx",
             ),
         ],
     ]
