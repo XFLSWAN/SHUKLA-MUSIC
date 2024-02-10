@@ -5,7 +5,7 @@ import os
 from SHUKLAMUSIC import app
 
 
-@app.on_message(filters.command("dj"))
+@app.on_message(filters.command("bass"))
 async def bass_boost_command(client, message):
     try:
         # Check if there is a reply to the command
@@ -36,11 +36,12 @@ def apply_bass_boost(audio_path):
     audio = AudioSegment.from_file(audio_path)
 
     # Apply bass boost effect (adjust the gain according to your preference)
-    boosted_audio = audio.low_pass_filter(250).high_pass_filter(100).apply_gain(40)
+    boosted_audio = audio.low_pass_filter(100).high_pass_filter(30).apply_gain(10)
 
     # Save the boosted audio as a temporary file
-    boosted_audio_path = "sʜɪᴠᴀɴsʜ ᴅᴊ.mp3"
+    boosted_audio_path = "sʜɪᴠᴀɴsʜ ʙᴀss.mp3"
     boosted_audio.export(boosted_audio_path, format="mp3")
 
     return boosted_audio_path
-  
+
+
