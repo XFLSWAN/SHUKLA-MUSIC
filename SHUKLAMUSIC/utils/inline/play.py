@@ -97,7 +97,7 @@ def stream_markup_timer(_, chat_id, played, dur):
         [
             InlineKeyboardButton(
                 text=f"⛦ ᴊᴏɪɴ ⛦",
-              url="https://t.me/THE_DRAMA_CLUB_01",
+              url="https://t.me/mastiwithfriendsx",
             ),
         ],
     ]
@@ -133,7 +133,7 @@ def stream_markup(_, chat_id):
         [
             InlineKeyboardButton(
                 text=f"⛦ ᴊᴏɪɴ ⛦",
-              url="https://t.me/THE_DRAMA_CLUB_01",
+              url="https://t.me/mastiwithfriendsx",
             ),
         ],
     ]
@@ -262,7 +262,7 @@ def queue_markup(_, videoid, chat_id):
         [
             InlineKeyboardButton(
                 text=f"⛦ ᴊᴏɪɴ ⛦",
-              url="https://t.me/THE_DRAMA_CLUB_01",
+              url="https://t.me/mastiwithfriendsx",
             ),
         ],
     ]
@@ -305,7 +305,7 @@ def speed_markup(_, chat_id):
         [
             InlineKeyboardButton(
                 text=f"⛦ ᴊᴏɪɴ ⛦",
-              url="https://t.me/THE_DRAMA_CLUB_01",
+              url="https://t.me/mastiwithfriendsx",
             ),
         ],
     ]
