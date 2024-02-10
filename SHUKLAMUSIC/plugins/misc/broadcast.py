@@ -14,7 +14,7 @@ from SHUKLAMUSIC.utils.database import (
     get_served_users,
 )
 from SHUKLAMUSIC.utils.decorators.language import language
-from VIPMUSIC.utils.formatters import alpha_to_int
+from SHUKLAMUSIC.utils.formatters import alpha_to_int
 from config import adminlist
 
 IS_BROADCASTING = False
