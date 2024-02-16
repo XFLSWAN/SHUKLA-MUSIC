@@ -12,7 +12,7 @@ from pyrogram.types import ChatJoinRequest, InlineKeyboardButton, InlineKeyboard
 from PIL import Image, ImageDraw, ImageFont
 import asyncio, os, time, aiohttp
 from pathlib import Path
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFont, ImageEnhance
 from asyncio import sleep
 from pyrogram import filters, Client, enums
 from pyrogram.enums import ParseMode
@@ -20,7 +20,11 @@ from pyrogram import *
 from pyrogram.types import *
 from logging import getLogger
 from SHUKLAMUSIC.utils.bad_ban import admin_filter
-
+import os
+from PIL import ImageDraw, Image, ImageFont, ImageChops
+from pyrogram import *
+from pyrogram.types import *
+from logging import getLogger
 
 
 random_photo = [
@@ -32,115 +36,149 @@ random_photo = [
 ]
 # --------------------------------------------------------------------------------- #
 
-get_font = lambda font_size, font_path: ImageFont.truetype(font_path, font_size)
-resize_text = (
-    lambda text_size, text: (text[:text_size] + "...").upper()
-    if len(text) > text_size
-    else text.upper()
-)
 
-# --------------------------------------------------------------------------------- #
 
-async def get_userinfo_img(
-    bg_path: str,
-    font_path: str,
-    user_id: Union[int, str],
-    profile_path: Optional[str] = None
-):
-    bg = Image.open(bg_path)
 
-    if profile_path:
-        img = Image.open(profile_path)
-        mask = Image.new("L", img.size, 0)
-        draw = ImageDraw.Draw(mask)
-        draw.pieslice([(0, 0), img.size], 0, 360, fill=255)
 
-        circular_img = Image.new("RGBA", img.size, (0, 0, 0, 0))
-        circular_img.paste(img, (0, 0), mask)
-        resized = circular_img.resize((400, 400))
-        bg.paste(resized, (440, 160), resized)
+LOGGER = getLogger(__name__)
 
-    img_draw = ImageDraw.Draw(bg)
+class WelDatabase:
+    def __init__(self):
+        self.data = {}
 
-    img_draw.text(
-        (529, 627),
-        text=str(user_id).upper(),
-        font=get_font(46, font_path),
-        fill=(255, 255, 255),
-    )
+    async def find_one(self, chat_id):
+        return chat_id in self.data
 
-    path = f"./userinfo_img_{user_id}.png"
-    bg.save(path)
-    return path
+    async def add_wlcm(self, chat_id):
+        if chat_id not in self.data:
+            self.data[chat_id] = {"state": "on"}  # Default state is "on"
 
-# --------------------------------------------------------------------------------- #
+    async def rm_wlcm(self, chat_id):
+        if chat_id in self.data:
+            del self.data[chat_id]
 
-bg_path = "SHUKLAMUSIC/assets/userinfo.png"
-font_path = "SHUKLAMUSIC/assets/font.ttf"
+wlcm = WelDatabase()
 
-# --------------------------------------------------------------------------------- #
+class temp:
+    ME = None
+    CURRENT = 2
+    CANCEL = False
+    MELCOW = {}
+    U_NAME = None
+    B_NAME = None
 
-# Function to handle both new members and members who have left
-async def handle_member_update(client: app, member: ChatMemberUpdated):
-    chat = member.chat
-    
-    count = await app.get_chat_members_count(chat.id)
-   
-    user = member.new_chat_member.user if member.new_chat_member else member.old_chat_member.user
-    try:
-        if user.photo:
-            # User has a profile photo
-            photo = await app.download_media(user.photo.big_file_id)
-            welcome_photo = await get_userinfo_img(
-                bg_path=bg_path,
-                font_path=font_path,
-                user_id=user.id,
-                profile_path=photo,
-            )
+
+
+def circle(pfp, size=(500, 500), brightness_factor=10):
+    pfp = pfp.resize(size, Image.ANTIALIAS).convert("RGBA")
+    pfp = ImageEnhance.Brightness(pfp).enhance(brightness_factor)
+    bigsize = (pfp.size[0] * 3, pfp.size[1] * 3)
+    mask = Image.new("L", bigsize, 0)
+    draw = ImageDraw.Draw(mask)
+    draw.ellipse((0, 0) + bigsize, fill=255)
+    mask = mask.resize(pfp.size, Image.ANTIALIAS)
+    mask = ImageChops.darker(mask, pfp.split()[-1])
+    pfp.putalpha(mask)
+    return pfp
+
+def welcomepic(pic, user, chatname, id, uname, brightness_factor=1.3):
+    background = Image.open("SHUKLAMUSIC/assets/wel2.png")
+    pfp = Image.open(pic).convert("RGBA")
+    pfp = circle(pfp, brightness_factor=brightness_factor) 
+    pfp = pfp.resize((825, 824))
+    draw = ImageDraw.Draw(background)
+    font = ImageFont.truetype('SHUKLAMUSIC/assets/font.ttf', size=110)
+    welcome_font = ImageFont.truetype('SHUKLAMUSIC/assets/font.ttf', size=60)
+    draw.text((2100, 1420), f'ID: {id}', fill=(12000, 12000, 12000), font=font)
+    pfp_position = (1990, 435)
+    background.paste(pfp, pfp_position, pfp)
+    background.save(f"downloads/welcome#{id}.png")
+    return f"downloads/welcome#{id}.png"
+
+
+@app.on_message(filters.command("welcome") & ~filters.private)
+async def auto_state(_, message):
+    usage = "**ᴜsᴀɢᴇ:**\n**⦿ /welcome [on|off]**"
+    if len(message.command) == 1:
+        return await message.reply_text(usage)
+    chat_id = message.chat.id
+    user = await app.get_chat_member(message.chat.id, message.from_user.id)
+    if user.status in (
+        enums.ChatMemberStatus.ADMINISTRATOR,
+        enums.ChatMemberStatus.OWNER,
+    ):
+        A = await wlcm.find_one(chat_id)
+        state = message.text.split(None, 1)[1].strip().lower()
+        if state == "off":
+            if A:
+                await message.reply_text("**ᴡᴇʟᴄᴏᴍᴇ ɴᴏᴛɪғɪᴄᴀᴛɪᴏɴ ᴀʟʀᴇᴀᴅʏ ᴅɪsᴀʙʟᴇᴅ !**")
+            else:
+                await wlcm.add_wlcm(chat_id)
+                await message.reply_text(f"**ᴅɪsᴀʙʟᴇᴅ ᴡᴇʟᴄᴏᴍᴇ ɴᴏᴛɪғɪᴄᴀᴛɪᴏɴ ɪɴ** {message.chat.title}")
+        elif state == "on":
+            if not A:
+                await message.reply_text("**ᴇɴᴀʙʟᴇ ᴡᴇʟᴄᴏᴍᴇ ɴᴏᴛɪғɪᴄᴀᴛɪᴏɴ.**")
+            else:
+                await wlcm.rm_wlcm(chat_id)
+                await message.reply_text(f"**ᴇɴᴀʙʟᴇᴅ ᴡᴇʟᴄᴏᴍᴇ ɴᴏᴛɪғɪᴄᴀᴛɪᴏɴ ɪɴ ** {message.chat.title}")
         else:
-            # User doesn't have a profile photo, use random_photo directly
-            welcome_photo = random.choice(random_photo)
+            await message.reply_text(usage)
+    else:
+        await message.reply("**sᴏʀʀʏ ᴏɴʟʏ ᴀᴅᴍɪɴs ᴄᴀɴ ᴇɴᴀʙʟᴇ ᴡᴇʟᴄᴏᴍᴇ ɴᴏᴛɪғɪᴄᴀᴛɪᴏɴ!**")
 
-        # Assuming you have a way to obtain the member count
-        
 
-        if member.new_chat_member:
-            # Welcome message for new members
-            caption = (
-            f"**🌷𝐇ᴇʏ {member.new_chat_member.user.mention}**\n\n**🏘𝐖ᴇʟᴄᴏᴍᴇ 𝐈ɴ 𝐍ᴇᴡ 𝐆ʀᴏᴜᴘ🥳**\n\n"
-            f"**📝** {chat.title}\n"
-            f"**🔐ʟɪɴᴋ » @{chat.username}**\n➖➖➖➖➖➖➖➖➖➖➖\n"
-            f"**๏ ᴍᴇᴍʙᴇʀ ɪᴅ »** `{member.new_chat_member.user.id}`\n"
-            f"**๏ ᴜsᴇʀɴᴀᴍᴇ » @{member.new_chat_member.user.username}**\n➖➖➖➖➖➖➖➖➖➖➖\n"
-            f"**👥ᴛᴏᴛᴀʟ ᴍᴇᴍʙᴇʀ ɴᴏᴡ » {count}**"
+
+@app.on_chat_member_updated(filters.group, group=-3)
+async def greet_new_member(_, member: ChatMemberUpdated):
+    chat_id = member.chat.id
+    count = await app.get_chat_members_count(chat_id)
+    A = await wlcm.find_one(chat_id)
+    if A:
+        return
+
+    user = member.new_chat_member.user if member.new_chat_member else member.from_user
+    
+    # Add the modified condition here
+    if member.new_chat_member and not member.old_chat_member and member.new_chat_member.status != "kicked":
+    
+        try:
+            pic = await app.download_media(
+                user.photo.big_file_id, file_name=f"pp{user.id}.png"
+            )
+        except AttributeError:
+            pic = "SHUKLAMUSIC/assets/upic.png"
+        if (temp.MELCOW).get(f"welcome-{member.chat.id}") is not None:
+            try:
+                await temp.MELCOW[f"welcome-{member.chat.id}"].delete()
+            except Exception as e:
+                LOGGER.error(e)
+        try:
+            welcomeimg = welcomepic(
+                pic, user.first_name, member.chat.title, user.id, user.username
             )
             button_text = "๏ ᴠɪᴇᴡ ɴᴇᴡ ᴍᴇᴍʙᴇʀ ๏"
             add_button_text = "๏ ᴋɪᴅɴᴀᴘ ᴍᴇ ๏"
-        else:
-            # Farewell message for members who have left
-            caption = f"**❅─────✧❅✦❅✧─────❅**\n\n**๏ ᴀ ᴍᴇᴍʙᴇʀ ʟᴇғᴛ ᴛʜᴇ ɢʀᴏᴜᴘ🥀**\n\n**➻** {member.old_chat_member.user.mention}\n\n**๏ ᴏᴋ ʙʏᴇ ᴅᴇᴀʀ ᴀɴᴅ ʜᴏᴘᴇ ᴛᴏ sᴇᴇ ʏᴏᴜ ᴀɢᴀɪɴ ɪɴ ᴛʜɪs ᴄᴜᴛᴇ ɢʀᴏᴜᴘ ᴡɪᴛʜ ʏᴏᴜʀ ғʀɪᴇɴᴅs✨**\n\n**ㅤ•─╼⃝𖠁 ʙʏᴇ ♡︎ ʙᴀʙʏ 𖠁⃝╾─•**"
-            button_text = "๏ ᴠɪᴇᴡ ʟᴇғᴛ ᴍᴇᴍʙᴇʀ ๏"
-            add_button_text = "๏ ᴋɪᴅɴᴀᴘ ᴍᴇ ๏"
+            deep_link = f"tg://openmessage?user_id={user.id}"
+            add_link = f"https://t.me/{app.username}?startgroup=true"
+            temp.MELCOW[f"welcome-{member.chat.id}"] = await app.send_photo(
+                member.chat.id,
+                photo=welcomeimg,
+                caption=f"""
+**❅────✦ ᴡᴇʟᴄᴏᴍᴇ ✦────❅**
 
-        # Generate a deep link to open the user's profile
-        deep_link = f"tg://openmessage?user_id={user.id}"
-        add_link = f"https://t.me/{app.username}?startgroup=true"
+▰▰▰▰▰▰▰▰▰▰▰▰▰
+**➻ ɴᴀᴍᴇ »** {user.mention}
+**➻ ɪᴅ »** `{user.id}`
+**➻ ᴜ_ɴᴀᴍᴇ »** @{user.username}
+**➻ ᴛᴏᴛᴀʟ ᴍᴇᴍʙᴇʀs »** {count}
+▰▰▰▰▰▰▰▰▰▰▰▰▰
 
-        # Send the message with the photo, caption, and button
-        await client.send_photo(
-            chat_id=member.chat.id,
-            photo=welcome_photo,
-            caption=caption,
-            reply_markup=InlineKeyboardMarkup([
-                [InlineKeyboardButton(button_text, url=deep_link)],
-                [InlineKeyboardButton(text=add_button_text, url=add_link)],
-            ])
-        )
-    except RPCError as e:
-        print(e)
-        return
-
-# Connect the function to the ChatMemberUpdated event
-@app.on_chat_member_updated(filters.group, group=20)
-async def member_update_handler(client: app, member: ChatMemberUpdated):
-    await handle_member_update(client, member)
+**❅─────✧❅✦❅✧─────❅**
+""",
+                reply_markup=InlineKeyboardMarkup([
+                    [InlineKeyboardButton(button_text, url=deep_link)],
+                    [InlineKeyboardButton(text=add_button_text, url=add_link)],
+                ])
+            )
+        except Exception as e:
+            LOGGER.error(e)
