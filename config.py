@@ -53,6 +53,11 @@ SUPPORT_CHAT = getenv("SUPPORT_CHAT", "https://t.me/mastiwithfriendsx")
 # Set this to True if you want the assistant to automatically leave chats after an interval
 AUTO_LEAVING_ASSISTANT = bool(getenv("AUTO_LEAVING_ASSISTANT", True))
 
+#Auto Gcast/Broadcast Handler (True = broadcast on , False = broadcast off During Hosting, Dont Do anything here.)
+AUTO_GCAST = os.getenv("AUTO_GCAST")
+
+#Auto Broadcast Message That You Want Use In Auto Broadcast In All Groups.
+AUTO_GCAST_MSG = getenv("AUTO_GCAST_MSG", "")
 
 # Get this credentials from https://developer.spotify.com/dashboard
 SPOTIFY_CLIENT_ID = getenv("SPOTIFY_CLIENT_ID", "19609edb1b9f4ed7be0c8c1342039362")
