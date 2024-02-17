@@ -33,9 +33,9 @@ def private_panel(_):
             )
         ],
         [
-            InlineKeyboardButton(text="⦿ 𝙶𝚁𝙾𝚄𝙿 ⦿", url=config.SUPPORT_CHAT),
-            InlineKeyboardButton(text="⦿ 𝚄𝙿𝙳𝙰𝚃𝙴𝚂 ⦿", url=config.SUPPORT_CHANNEL),
-            InlineKeyboardButton(text="⦿ 𝚁𝙴𝙿𝙾 ⦿", url=f"https://github.com/itzshukla/STRANGER-MUSIC/fork"),
+            InlineKeyboardButton(text="⦿𝙶𝚁𝙾𝚄𝙿⦿", url=config.SUPPORT_CHAT),
+            InlineKeyboardButton(text="⦿𝚄𝙿𝙳𝙰𝚃𝙴𝚂⦿", url=config.SUPPORT_CHANNEL),
+            InlineKeyboardButton(text="⦿𝚁𝙴𝙿𝙾⦿", url=f"https://github.com/itzshukla/STRANGER-MUSIC/fork"),
         ],
         [
             InlineKeyboardButton(text="⦿ 𝙵𝙴𝙰𝚃𝚄𝚁𝙴𝚂 ⦿", callback_data="settings_back_helper")
