@@ -12,13 +12,13 @@ def start_panel(_):
             ),
         ],
         [
-            InlineKeyboardButton(text="۞ 𝐇𝙴𝙻𝙿 ۞", callback_data="settings_back_helper"),
+            InlineKeyboardButton(text="⦿ 𝙷𝙴𝙻𝙿 ⦿", callback_data="settings_back_helper"),
             InlineKeyboardButton(
-                text="☢ 𝐒𝙴𝚃 ☢", callback_data="settings_helper"
+                text="⦿ 𝚂𝙴𝚃 ⦿", callback_data="settings_helper"
             ),
         ],
         [
-            InlineKeyboardButton(text="✡ 𝐆𝚁𝙾𝚄𝙿 ✡", url=config.SUPPORT_CHAT),
+            InlineKeyboardButton(text="⦿ 𝙶𝚁𝙾𝚄𝙿 ⦿", url=config.SUPPORT_CHAT),
         ],
     ]
     return buttons
@@ -33,12 +33,12 @@ def private_panel(_):
             )
         ],
         [
-            InlineKeyboardButton(text="ɢʀᴏᴜᴘ ✨", url=config.SUPPORT_CHAT),
-            InlineKeyboardButton(text="sᴜᴘᴘᴏʀᴛ 🥀", url=config.SUPPORT_CHANNEL),
-            InlineKeyboardButton(text="ʀᴇᴘᴏ🗡️", url=f"https://github.com/itzshukla/STRANGER-MUSIC/fork"),
+            InlineKeyboardButton(text="⦿ 𝙶𝚁𝙾𝚄𝙿 ⦿", url=config.SUPPORT_CHAT),
+            InlineKeyboardButton(text="⦿ 𝚄𝙿𝙳𝙰𝚃𝙴𝚂 ⦿", url=config.SUPPORT_CHANNEL),
+            InlineKeyboardButton(text="⦿ 𝚁𝙴𝙿𝙾 ⦿", url=f"https://github.com/itzshukla/STRANGER-MUSIC/fork"),
         ],
         [
-            InlineKeyboardButton(text="۞ ғᴇᴀᴛᴜʀᴇs ۞", callback_data="settings_back_helper")
+            InlineKeyboardButton(text="⦿ 𝙵𝙴𝙰𝚃𝚄𝚁𝙴𝚂 ⦿", callback_data="settings_back_helper")
         ],
     ]
     return buttons
