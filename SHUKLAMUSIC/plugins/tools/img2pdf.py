@@ -2,7 +2,6 @@ from io import BytesIO
 from os import path, remove
 from time import time
 
-import img2pdf
 from PIL import Image
 from pyrogram import filters
 from pyrogram.types import Message
@@ -37,7 +36,7 @@ async def convert(
         img.save(img_path, "JPEG", quality=100)
 
     pdf = BytesIO(img2pdf.convert(documents))
-    pdf.name = "DAXX.pdf"
+    pdf.name = "SHUKLA.pdf"
 
     if len(main_message.command) >= 2:
         names = main_message.text.split(None, 1)[1]
