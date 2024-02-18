@@ -1,5 +1,4 @@
 import os
-import cv2
 from PIL import Image
 from pyrogram import Client, filters
 from SHUKLAMUSIC import app
