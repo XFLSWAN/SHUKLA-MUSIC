@@ -14,7 +14,7 @@ def start_panel(_):
         [
             InlineKeyboardButton(text="🕯ʜᴇʟᴘ🕯️", callback_data="settings_back_helper"),
             InlineKeyboardButton(
-                text="🍭 ᴧᴅᴍɪɴ 🍭", callback_data="settings_helper"
+                text="🍭 sᴇᴛ 🍭", callback_data="settings_helper"
             ),
         ],
         [
@@ -33,12 +33,12 @@ def private_panel(_):
             )
         ],
         [
-            InlineKeyboardButton(text="🍥sᴜᴘᴘᴏʀᴛ🍥", url=config.SUPPORT_CHAT),
-            InlineKeyboardButton(text="✨ᴜᴘᴅᴀᴛᴇs✨", url=config.SUPPORT_CHANNEL),
-            InlineKeyboardButton(text="🗼ʀᴇᴘᴏ🗼", url=f"https://github.com/itzshukla/STRANGER-MUSIC/fork"),
+            InlineKeyboardButton(text="🍬 sᴜᴘᴘᴏꝛᴛ 🍬", url=config.SUPPORT_CHAT),
+            InlineKeyboardButton(text="🍹 ᴜᴘᴅᴀᴛᴇ 🍹", url=config.SUPPORT_CHANNEL),
+            InlineKeyboardButton(text="🍡 sᴏᴜꝛᴄᴇ 🍡", url=f"https://github.com/itzshukla/STRANGER-MUSIC/fork"),
         ],
         [
-            InlineKeyboardButton(text="⦿ 𝙵𝙴𝙰𝚃𝚄𝚁𝙴𝚂 ⦿", callback_data="settings_back_helper")
+            InlineKeyboardButton(text="🏩 ʜᴇʟᴘ ᴧиᴅ ᴄᴏᴍᴍᴧɴᴅs 🏩", callback_data="settings_back_helper")
         ],
     ]
     return buttons
