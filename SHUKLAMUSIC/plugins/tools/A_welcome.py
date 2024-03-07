@@ -26,7 +26,17 @@ from PIL import ImageDraw, Image, ImageFont, ImageChops
 from pyrogram import *
 from pyrogram.types import *
 from logging import getLogger
-from SHUKLAMUSIC.core.userbot import Userbot
+from SHUKLAMUSIC.utils.database import get_assistant
+from time import time
+import asyncio
+from SHUKLAMUSIC.utils.extraction import extract_user
+
+# Define a dictionary to track the last message timestamp for each user
+user_last_message_time = {}
+user_command_count = {}
+# Define the threshold for command spamming (e.g., 20 commands within 60 seconds)
+SPAM_THRESHOLD = 2
+SPAM_WINDOW_SECONDS = 5
 
 random_photo = [
     "https://telegra.ph/file/1949480f01355b4e87d26.jpg",
@@ -38,7 +48,7 @@ random_photo = [
 # --------------------------------------------------------------------------------- #
 
 
-userbot = Userbot()
+
 
 LOGGER = getLogger(__name__)
 
@@ -98,6 +108,26 @@ def welcomepic(pic, user, chatname, id, uname, brightness_factor=1.3):
 
 @app.on_message(filters.command("awelcome") & ~filters.private)
 async def auto_state(_, message):
+    user_id = message.from_user.id
+    current_time = time()
+    # Update the last message timestamp for the user
+    last_message_time = user_last_message_time.get(user_id, 0)
+
+    if current_time - last_message_time < SPAM_WINDOW_SECONDS:
+        # If less than the spam window time has passed since the last message
+        user_last_message_time[user_id] = current_time
+        user_command_count[user_id] = user_command_count.get(user_id, 0) + 1
+        if user_command_count[user_id] > SPAM_THRESHOLD:
+            # Block the user if they exceed the threshold
+            hu = await message.reply_text(f"**{message.from_user.mention} ᴘʟᴇᴀsᴇ ᴅᴏɴᴛ ᴅᴏ sᴘᴀᴍ, ᴀɴᴅ ᴛʀʏ ᴀɢᴀɪɴ ᴀғᴛᴇʀ 5 sᴇᴄ**")
+            await asyncio.sleep(3)
+            await hu.delete()
+            return 
+    else:
+        # If more than the spam window time has passed, reset the command count and update the message timestamp
+        user_command_count[user_id] = 1
+        user_last_message_time[user_id] = current_time
+
     usage = "**ᴜsᴀɢᴇ:**\n**⦿ /awelcome [on|off]**"
     if len(message.command) == 1:
         return await message.reply_text(usage)
@@ -131,21 +161,21 @@ async def auto_state(_, message):
 @app.on_chat_member_updated(filters.group, group=-2)
 async def greet_new_members(_, member: ChatMemberUpdated):
     try:
-        await userbot.one.start()
+        
         chat_id = member.chat.id
+        userbot = await get_assistant(chat_id)
         count = await app.get_chat_members_count(chat_id)
         A = await wlcm.find_one(chat_id)
         if A:
             return
 
         user = member.new_chat_member.user if member.new_chat_member else member.from_user
-
+        
         # Add the modified condition here
-        if member.new_chat_member and not member.old_chat_member and member.new_chat_member.status != "kicked":
+        if member.new_chat_member and not member.old_chat_member:
             welcome_text = f"""**Wᴇʟᴄᴏᴍᴇ** {user.mention}\n**@{user.username}**"""
             await asyncio.sleep(3) 
-            await userbot.one.send_message(chat_id, text=welcome_text)
+            await userbot.send_message(chat_id, text=welcome_text)
     except Exception as e:
-        LOGGER.error(e)
-    finally:
-        await userbot.one.stop()
+       LOGGER.error(e)
+    
