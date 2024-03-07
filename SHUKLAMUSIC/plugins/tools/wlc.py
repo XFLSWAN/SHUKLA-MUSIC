@@ -1,11 +1,25 @@
 from SHUKLAMUSIC import app
-from pyrogram import filters
+from pyrogram import Client, filters
+from pyrogram.enums import ChatMemberStatus
+from pyrogram.errors import (
+    ChatAdminRequired,
+    InviteRequestSent,
+    UserAlreadyParticipant,
+    UserNotParticipant,
+)
 from pyrogram.errors import RPCError
 from pyrogram.types import ChatMemberUpdated, InlineKeyboardMarkup, InlineKeyboardButton
 from os import environ
 from typing import Union, Optional
 from PIL import Image, ImageDraw, ImageFont
 from os import environ
+import requests
+import random
+from SHUKLAMUSIC import app, userbot
+from SHUKLAMUSIC.misc import SUDOERS
+from pyrogram import * 
+from pyrogram.types import *
+from SHUKLAMUSIC.utils.bad_ban import admin_filter
 import random
 from pyrogram import Client, filters
 from pyrogram.types import ChatJoinRequest, InlineKeyboardButton, InlineKeyboardMarkup
@@ -21,6 +35,7 @@ from pyrogram.types import *
 from logging import getLogger
 from SHUKLAMUSIC.utils.bad_ban import admin_filter
 import os
+from SHUKLAMUSIC.misc import SUDOERS
 from PIL import ImageDraw, Image, ImageFont, ImageChops
 from pyrogram import *
 from pyrogram.types import *
@@ -139,7 +154,7 @@ async def greet_new_member(_, member: ChatMemberUpdated):
     user = member.new_chat_member.user if member.new_chat_member else member.from_user
     
     # Add the modified condition here
-    if member.new_chat_member and not member.old_chat_member and member.new_chat_member.status != "kicked":
+    if member.new_chat_member and not member.old_chat_member:
     
         try:
             pic = await app.download_media(
@@ -182,3 +197,6 @@ async def greet_new_member(_, member: ChatMemberUpdated):
             )
         except Exception as e:
             LOGGER.error(e)
+
+
+      
