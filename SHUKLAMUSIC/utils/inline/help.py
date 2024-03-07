@@ -16,7 +16,7 @@ def help_pannel(_, START: Union[bool, int] = None):
             text=_["CLOSEMENU_BUTTON"], callback_data=f"close"
         ),
         InlineKeyboardButton(
-            text="⦿ 𝙼𝙾𝚁𝙴 ⦿", callback_data="help_callback hb13"
+            text="🕯️️ᴍᴏʀᴇ 🕯️", callback_data="help_callback hb13"
         ),
     ]
     mark = second if START else first
@@ -24,66 +24,66 @@ def help_pannel(_, START: Union[bool, int] = None):
         [
             [
                 InlineKeyboardButton(
-                    text="⦿ 𝙰𝙳𝙼𝙸𝙽 ⦿",
+                    text="🍭 ᴧᴅᴍɪɴ 🍭",
                     callback_data="help_callback hb1",
                 ),
                 InlineKeyboardButton(
-                    text="⦿ 𝙰𝚄𝚃𝙷 ⦿",
+                    text="🍨 ᴧᴜᴛʜ 🍨",
                     callback_data="help_callback hb2",
                 ),
             
             ],
             [
                 InlineKeyboardButton(
-                    text="⦿ 𝙱𝙻𝙾𝙲𝙺 ⦿",
+                    text="🧳 ʙʟᴏᴄᴋ 🧳",
                     callback_data="help_callback hb3",
                 ),
                 InlineKeyboardButton(
-                    text="⦿ 𝙶𝙲𝙰𝚂𝚃 ⦿",
+                    text="🗼 ɢ-ᴄᴧsᴛ 🗼",
                     callback_data="help_callback hb4",
                 ),
             ],
             [
                 InlineKeyboardButton(
-                    text="⦿ 𝙶𝙱𝙰𝙽 ⦿",
+                    text="🚫 ɢ-ʙᴧɴ 🚫",
                     callback_data="help_callback hb12",
                 ),
                 InlineKeyboardButton(
-                    text="⦿ 𝙻𝚈𝚁𝙸𝙲𝚂 ⦿",
+                    text="🍥 ʟʏʀɪᴄs 🍥",
                     callback_data="help_callback hb5",
                 ),
             ],
                         
             [
                 InlineKeyboardButton(
-                    text="⦿ 𝙿𝙻𝙰𝚈𝙻𝙸𝚂𝚃 ⦿",
+                    text="🍷 ᴘʟᴀʏʟɪsᴛs 🍷",
                     callback_data="help_callback hb6",
                 ),
                 InlineKeyboardButton(
-                    text="⦿ 𝚅𝙾𝙸𝙲𝙴-𝙲𝙷𝙰𝚃 ⦿",
+                    text="🍡 ᴠᴏɪᴄᴇ-ᴄʜᴀᴛ 🍡",
                     callback_data="help_callback hb10",
                 ),
             ],
             [
-                            InlineKeyboardButton(text="⦿ 𝚂𝙷𝙸𝚅𝙰𝙽𝚂𝙷-𝚇𝙳 ⦿", url=f"https://t.me/SHIVANSH39"),
-                            InlineKeyboardButton(text="⦿ 𝚂𝙷𝚄𝙺𝙻𝙰 ⦿", url=f"https://t.me/ITSZ_SHIVANSH"),
+                            InlineKeyboardButton(text="✨ sʜɪᴠᴀɴsʜ-xᴅ ✨", url=f"https://t.me/SHIVANSH39"),
+                            InlineKeyboardButton(text="🐉 sʜᴜᴋʟᴀ 🐉", url=f"https://t.me/ITSZ_SHIVANSH"),
             ],
             [
            
                 InlineKeyboardButton(
-                    text="⦿ 𝙿𝙻𝙰𝚈 ⦿",
+                    text="🚀 ᴘʟᴀʏ 🚀",
                     callback_data="help_callback hb8",
                 ),
             
             
                 InlineKeyboardButton(
-                    text="⦿ 𝚂𝚄𝙳𝙾 ⦿",
+                    text="🎐 sᴜᴅᴏ 🎐",
                     callback_data="help_callback hb9",
                 ),
             ],
             [
                 InlineKeyboardButton(
-                    text="⦿ 𝚂𝚃𝙰𝚁𝚃 ⦿",
+                    text="▪️ sᴛᴀʀᴛ ▪️",
                     callback_data="help_callback hb11",
                 ),
             ],
@@ -105,7 +105,7 @@ def help_back_markup(_):
                     text=_["CLOSE_BUTTON"], callback_data=f"close"
                 ),
                 InlineKeyboardButton(
-                    text="⦿ 𝙼𝙾𝚁𝙴 ⦿", callback_data="help_callback hb14"
+                    text="🕯️️ᴍᴏʀᴇ 🕯️", callback_data="help_callback hb14"
                 )
 
             ]
@@ -118,7 +118,7 @@ def private_help_panel(_):
     buttons = [
         [
             InlineKeyboardButton(
-                text="⦿ 𝙷𝙴𝙻𝙿 ⦿",
+                text="🔖 ʜᴇʟᴘ 🔖",
                 callback_data="settings_back_helper",
             ),
         ],
